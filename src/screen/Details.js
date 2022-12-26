@@ -1,19 +1,30 @@
 import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { useRoute } from '@react-navigation/native';
+import React, { useState } from 'react'
+import { useNavigation, useRoute } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import Entypo from 'react-native-vector-icons/Entypo'
 const Details = () => {
 
+  const navigation=useNavigation();
   const route = useRoute();
-  console.log(route)
+  // console.log(route)
+  const [productDetails, setProductDetails] = useState()
+
+  fetch(`https://jsonplaceholder.typicode.com/photos/${route.params.ADVANTURE}`)
+    .then(res => res.json())
+    .then(json => setProductDetails(json))
 
   return (
     <SafeAreaView style={styles.Main}>
       <ImageBackground style={styles.ImageBackground}
-        source={route.params.ADVANTURE.Image}>
+        source={{ uri: productDetails?.url }}>
         <View style={styles.HeadIcon}>
-          <View style={styles.LeftIcon}>{route.params.ADVANTURE.LeftIcon}</View>
-          <View style={styles.LeftIcon}>{route.params.ADVANTURE.Icon}</View>
+          <View style={styles.LeftIcon}>
+            <Entypo name='chevron-small-left' size={25} color='#708DBB'
+            onPress={() => navigation.goBack()}/>
+          </View>
+          <View style={styles.LeftIcon}> 
+           <AntDesign name='hearto' size={25} color='#708DBB' /></View>
         </View>
         <View style={styles.IMageContainer}>
           <TouchableOpacity style={styles.SubImage}>
@@ -31,7 +42,7 @@ const Details = () => {
       </ImageBackground>
       <View style={styles.SecondCOntainer}>
         <View style={styles.TextCont}>
-          <Text style={styles.Waduk}>Waduk Wonorejo</Text>
+          <Text style={styles.Waduk}>{productDetails?.title}</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.price}>$96</Text>
             <Text style={styles.persons}>/person</Text>
@@ -146,13 +157,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     marginTop: 20,
     alignItems: 'center',
-
   },
   Waduk: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
-    width: 130,
+    width: 200,
     color: '#000',
+    textAlign: 'justify',
   },
   price: {
     fontSize: 25,
@@ -209,29 +220,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: '#000'
   },
-  LastContainer:{
-    marginTop:20,
-    marginHorizontal:25
+  LastContainer: {
+    marginTop: 20,
+    marginHorizontal: 25
   },
-  lastText:{
-    textAlign:'justify',
-    lineHeight:25,
-    fontSize:17,
-    fontWeight:'bold',
+  lastText: {
+    textAlign: 'justify',
+    lineHeight: 25,
+    fontSize: 17,
+    fontWeight: 'bold',
   },
-  Buttom:{
-    flexDirection:'row',
-    backgroundColor:'blue',
-    marginHorizontal:25,
-    borderRadius:15,
-    alignItems:'center',
-    justifyContent:'space-evenly'
+  Buttom: {
+    flexDirection: 'row',
+    backgroundColor: 'blue',
+    marginHorizontal: 25,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   },
-  ButtomText:{
-    color:'#fff',
-    fontSize:20,
-    fontWeight:'bold',
-    padding:20,
-   paddingHorizontal:100,
+  ButtomText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 20,
+    paddingHorizontal: 100,
   }
 })

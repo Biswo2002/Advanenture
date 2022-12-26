@@ -1,5 +1,6 @@
-import { FlatList, Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, Image, ImageBackground, Pressable, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -7,62 +8,65 @@ import { useNavigation } from '@react-navigation/native'
 const Home = () => {
 
     const navigation = useNavigation();
+    const [myUserData, setMyUserData] = useState([]);
+    const getUserData = async () => {
+        try {
+            const response = await fetch('https://jsonplaceholder.typicode.com/photos');
+            const myData = await response.json();
+            setMyUserData(myData)
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
+    useEffect(() => {
+        getUserData();
+    }, []);
+
+    
     const Advanture = [
         {
             id: 'Adv_1',
             Title: 'Waduk Wonorejo',
-            Image: require('../assets/image/A2.jpg'),
-            Icon: <AntDesign name='hearto' size={25} color='#708DBB' />,
-            LeftIcon: <Entypo name='chevron-small-left' size={25} color='#708DBB'
-                onPress={() => navigation.goBack()}
-            />,
+            image: require('../assets/image/A2.jpg'),
+          
+           
 
         },
         {
             id: 'Adv_2',
             Title: 'Waduk Wonorejo',
-            Image: require('../assets/image/A5.jpg'),
-            Icon: <AntDesign name='hearto' size={25} color='#708DBB' />,
-            LeftIcon: <Entypo name='chevron-small-left' size={25} color='#708DBB'
-                onPress={() => navigation.goBack()}
-            />,
+            image: require('../assets/image/A5.jpg'),
+          
+           
         },
         {
             id: 'Adv_3',
             Title: 'Waduk Wonorejo',
-            Image: require('../assets/image/A3.jpg'),
-            Icon: <AntDesign name='hearto' size={25} color='#708DBB' />,
-            LeftIcon: <Entypo name='chevron-small-left' size={25} color='#708DBB'
-                onPress={() => navigation.goBack()}
-            />,
+            image: require('../assets/image/A3.jpg'),
+          
+           
         },
         {
             id: 'Adv_4',
             Title: 'Waduk Wonorejo',
-            Image: require('../assets/image/A4.jpg'),
-            Icon: <AntDesign name='hearto' size={25} color='#708DBB' />,
-            LeftIcon: <Entypo name='chevron-small-left' size={25} color='#708DBB'
-                onPress={() => navigation.goBack()}
-            />,
+            image: require('../assets/image/A4.jpg'),
+          
+           
         },
         {
             id: 'Adv_5',
             Title: 'Waduk Wonorejo',
-            Image: require('../assets/image/A5.jpg'),
-            Icon: <AntDesign name='hearto' size={25} color='#708DBB' />,
-            LeftIcon: <Entypo name='chevron-small-left' size={25} color='#708DBB'
-                onPress={() => navigation.goBack()}
-            />,
+            image: require('../assets/image/A5.jpg'),
+          
+           
         },
         {
             id: 'Adv_6',
             Title: 'Waduk Wonorejo',
-            Image: require('../assets/image/A3.jpg'),
+            image: require('../assets/image/A3.jpg'),
             Icon: <AntDesign name='hearto' size={24} color='#708DBB' />,
-            LeftIcon: <Entypo name='chevron-small-left' size={25} color='#708DBB'
-                onPress={() => navigation.goBack()}
-            />,
+           
 
         },
 
@@ -88,19 +92,23 @@ const Home = () => {
             <View style={styles.FlatList}
             >
                 <FlatList
-                    data={Advanture}
+                    data={myUserData}
+                    // data={Advanture}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item }) => (
                         <TouchableOpacity style={styles.SecndContainer}
-                            onPress={() => navigation.navigate('Details', { ADVANTURE: item })}
+                            onPress={() => navigation.navigate('Details', { ADVANTURE: item?.id })}
                         >
                             <ImageBackground style={styles.ImageBackground}
 
-                                source={item?.Image} imageStyle={{ borderRadius: 20 }} >
-                                <View style={styles.HeatContainer}>
-                                    {item?.Icon}
-                                </View>
+                                source={{ uri: item?.url }} imageStyle={{ borderRadius: 20 }} >
+                                <Pressable>
+                                    <View style={styles.HeatContainer}>
+                                        {/* {item?.Icon} */}
+                                        <AntDesign name='hearto' size={25} color='#708DBB' />
+                                    </View>
+                                </Pressable>
                                 <Text style={styles.Title}>{item.Title}</Text>
                             </ImageBackground>
                         </TouchableOpacity>
